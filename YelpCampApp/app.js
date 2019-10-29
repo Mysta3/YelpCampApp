@@ -7,7 +7,7 @@ app.set("view engine", "ejs");
 
 var campgrounds =[
     {name: "Salmon Creek", image: "https://pixabay.com/get/54e6dc414a57a414f6da8c7dda793f7f1636dfe2564c704c722d78dc914ec259_340.jpg"},
-    {name: "Little Bear Mt.", image: "https://pixabay.com/get/54e8d64a4a5baf14f6da8c7dda793f7f1636dfe2564c704c722d78dc914ec259_340.jpg"},
+    {name: "Little Bear Mt.", image: "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fcdn-image.travelandleisure.com%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F1600x1000%2Fpublic%2F1516125062%2Fgrand-teton-national-park-wyoming-SCENICCAMP0118.jpg%3Fitok%3Dakrvix61&q=85"},
     {name: "YellowFish Woods", image: "https://pixabay.com/get/5ee1d14b484fad0bffd8992ccf2934771438dbf85254764b76277dd7904c_340.jpg"}
 ];
 
