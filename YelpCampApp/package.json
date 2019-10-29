@@ -1,0 +1,26 @@
+{
+  "name": "yelpcampapp",
+  "version": "1.0.0",
+  "description": "yelpCamp app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mysta3/YelpCampApp.git"
+  },
+  "keywords": [
+    "yelpCamp"
+  ],
+  "author": "Myshawne S.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mysta3/YelpCampApp/issues"
+  },
+  "homepage": "https://github.com/Mysta3/YelpCampApp#readme",
+  "dependencies": {
+    "ejs": "^2.7.1",
+    "express": "^4.17.1"
+  }
+}
