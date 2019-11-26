@@ -1,7 +1,18 @@
-var express    = require('express'),
-	app        = express(),
-	bodyParser = require("body-parser"),
-	mongoose   = require("mongoose"); 
+var express       = require('express'),
+	app           = express(),
+	bodyParser    = require("body-parser"),
+    mongoose      = require("mongoose"),
+    passport      = require('passport'),
+    LocalStrategy = require('passport-local'),
+    Campground    = require("./models/campground"),
+    Comment       = require("./models/comment"),
+    User          = require('./models/user'),
+    methodOverride = require('method-override'),
+    seedDB        = require("./seeds");
+
+var commentRoutes    = require("./routes/comments"),
+    campgroundRoutes = require("./routes/campgrounds"),
+    indexRoutes      = require("./routes/index");
 
 //connect DB & fix dependency issues
 mongoose.set('useNewUrlParser', true);
@@ -9,69 +20,34 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect('mongodb://localhost/yelp_camp', {useNewUrlParser: true});
-
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(__dirname + "/public")); //Serve public directory. __dirname points to directory the script lives in.
 app.set("view engine", "ejs");
+app.use(methodOverride("_method"));
+seedDB();
 
-//SCHEMA SETUP
-var campgroundSchema = new mongoose.Schema({
-	name: String,
-	image: String
+//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Naruto is better than Sasuke",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req,res,next){
+    res.locals.currentUser = req.user;
+    next();
 });
 
-//Model Setup
-var Campground = mongoose.model("Campground", campgroundSchema);
+app.use(indexRoutes);
+app.use(campgroundRoutes); 
+app.use(commentRoutes);
 
-
-// Campground.create({
-// 	name: "Salmon Creek", 
-// 	image: "https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?cs=srgb&dl=photo-of-pitched-dome-tents-overlooking-mountain-ranges-1687845.jpg&fm=jpg"}, function(err,campground){
-// 	if(err){
-// 		console.log(err);
-// 	}else {
-// 		console.log("Newly created campground");
-// 		console.log(campground);
-// 	}
-// })
-
-
-
-app.get("/", function(req,res){
-    res.render("landing");
-});
-
-app.get("/campgrounds", function(req,res){
-//Get all campgrounds
-	Campground.find({}, function(err, allCampgrounds){
-		if(err){
-			console.log(err);
-		}else {
-		 res.render("campgrounds", {campgrounds: allCampgrounds});
-		}
-	})
-});
-
-app.post("/campgrounds", function(req,res){
-
-    //get data from form and add to campgrounds array
-    let name = req.body.name; //name value comes from name attribute in form
-    let image = req.body.image; //image value comes from image attribute in form
-    let newCampground = {name: name, image: image}; //create new object
-     //Create a new campground and save to DB
-    Campground.create(newCampground, function(err, newlyCreated){
-        if(err){
-            console.log(err);
-        }else {
-                //redirect back to campgrounds page
-            res.redirect("/campgrounds");
-        }
-   })
-});
-
-//CAMPGROUNDS FORM
-app.get("/campgrounds/new", function(req,res){
-    res.render("new.ejs");
-});
 
 
 app.listen(3000, function(){
