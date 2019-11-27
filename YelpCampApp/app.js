@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public")); //Serve public directory. __dirname points to directory the script lives in.
 app.set("view engine", "ejs");
 app.use(methodOverride("_method"));
-seedDB();
+// seedDB();
 
 //PASSPORT CONFIGURATION
 app.use(require("express-session")({
