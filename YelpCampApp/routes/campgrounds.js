@@ -2,6 +2,7 @@ var express = require('express'),
     router  = express.Router(),
     Campground = require("../models/campground"),
     middleware = require("../middleware"); //if you require a directory the index.js file will auto be required
+     
 
 //INDEX route
 router.get("/campgrounds", function(req,res){
@@ -21,13 +22,15 @@ router.get("/campgrounds", function(req,res){
     
         //get data from form and add to campgrounds array
         let name = req.body.name; //name value comes from name attribute in form
+        let price = req.body.price;
         let image = req.body.image; //image value comes from image attribute in form
         let desc = req.body.description; //description from form 
         let author = {
             id: req.user._id,
             username: req.user.username
         };
-        let newCampground = {name: name, image: image, description: desc, author: author}; //create new object
+
+        let newCampground = {name: req.body.campground.name, price: req.body.campground.price, image: req.body.campground.image, description: req.body.campground.desc, author: author, location: location, lat: lat, lng: lng}; //create new object
          //Create a new campground and save to DB
         Campground.create(newCampground, function(err, newlyCreated){
             if(err){
@@ -36,8 +39,8 @@ router.get("/campgrounds", function(req,res){
                     //redirect back to campgrounds page
                 res.redirect("/campgrounds");
             }
-       })
-    });
+        });
+       });
     
     //NEW route- CAMPGROUNDS FORM
     router.get("/campgrounds/new", middleware.isLoggedIn, function(req,res){
@@ -48,7 +51,7 @@ router.get("/campgrounds", function(req,res){
     router.get("/campgrounds/:id", function(req,res){
         //find campground by ID using id param
         Campground.findById(req.params.id).populate("comments").exec(function(err,foundCampground){
-            if(err){
+            if(err || !foundCampground){
                 console.log(err);
             }else{
                  //show more information
@@ -67,6 +70,8 @@ router.get("/campgrounds", function(req,res){
 
     //UPDATE CAMPGROUND ROUTE
     router.put("/campgrounds/:id", middleware.checkCampgroundOwnership, function(req,res){
+
+        
         //find and updagte campground
         Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground) {
             if(err){
@@ -74,8 +79,9 @@ router.get("/campgrounds", function(req,res){
             } else {
                 res.redirect("/campgrounds/" + req.params.id);
             }
-        })
-    }); 
+             });
+        });
+
 
     //DESTROY ROUTE
     router.delete("/campgrounds/:id", middleware.checkCampgroundOwnership, function(req,res){
