@@ -28,6 +28,9 @@ app.use(methodOverride("_method"));
 app.use(flash());
 // seedDB();
 
+//MOMENT JS
+app.locals.moment = require('moment');
+
 //PASSPORT CONFIGURATION
 app.use(require("express-session")({
     secret: "Naruto is better than Sasuke",
