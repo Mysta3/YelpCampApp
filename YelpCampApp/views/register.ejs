@@ -4,13 +4,31 @@
         <div style="width: 30%; margin: 25px auto;">
             <form action="/register" method="post">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="username" placeholder="username">
+                    <input class="form-control" type="text" name="firstName" placeholder="First Name">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="password">
+                    <input class="form-control" type="text" name="lastName" placeholder="Last Name">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="adminCode" placeholder="Admin code">
+                    <input class="form-control" type="text" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="avatar" placeholder="Avatar url">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="adminCheck" onclick = yesnoCheck()>
+                    <label class="form-check-label" for="adminCheck">
+                         Did you receive an admin code? 
+                    </label>
+                    </div>
+                <div  class="form-group">
+                    <input style="display: none" class="form-control" id="adminCode" type="password" name="adminCode" placeholder="Admin code">
                 </div>                
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Sign Up!</button>
@@ -19,5 +37,14 @@
             <a href="/campgrounds">Go Back</a>
         </div>
     </div>
+    <script type="text/javascript">
+        function yesnoCheck() {
+            if (document.getElementById('adminCheck').checked) {
+                document.getElementById('adminCode').style.display = 'block';
+            }
+            else document.getElementById('adminCode').style.display = 'none';
+        
+        }
+        </script>
 
 <% include ./partials/footer %>

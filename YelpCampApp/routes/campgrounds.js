@@ -30,7 +30,7 @@ router.get("/campgrounds", function(req,res){
             username: req.user.username
         };
 
-        let newCampground = {name: req.body.campground.name, price: req.body.campground.price, image: req.body.campground.image, description: req.body.campground.desc, author: author, location: location, lat: lat, lng: lng}; //create new object
+        let newCampground = {name: name, price: price, image: image, description: desc, author: author}; //create new object
          //Create a new campground and save to DB
         Campground.create(newCampground, function(err, newlyCreated){
             if(err){
