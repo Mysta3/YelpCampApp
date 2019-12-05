@@ -4,16 +4,33 @@ var express = require('express'),
     middleware = require("../middleware"); //if you require a directory the index.js file will auto be required
      
 
-//INDEX route
+//INDEX route - show all campgrounds
 router.get("/campgrounds", function(req,res){
+    var noMatch = null;
+    if(req.query.search){
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+    //search all campgrounds - fuzzy search
+    Campground.find({name: regex}, function(err, allCampgrounds){
+        if(err){
+            console.log(err);
+        }else{
+            if(allCampgrounds.length < 1){
+                noMatch = "Nothing Matched Your Search";
+            }   
+         res.render("campgrounds/index", {campgrounds: allCampgrounds, noMatch: noMatch});
+        }
+    });
+    }else {
     //Get all campgrounds
-        Campground.find({}, function(err, allCampgrounds){
-            if(err){
-                console.log(err);
-            }else {
-             res.render("campgrounds/index", {campgrounds: allCampgrounds});
-            }
-        })
+    Campground.find({}, function(err, allCampgrounds){
+        if(err){
+            console.log(err);
+        }else {
+         res.render("campgrounds/index", {campgrounds: allCampgrounds, noMatch: noMatch});
+        }
+    })
+    }
+
     });
     
     
@@ -98,5 +115,9 @@ router.get("/campgrounds", function(req,res){
                 res.redirect("/campgrounds");
             });
         })
-    })
+    });
+
+    function escapeRegex(text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    };
     module.exports = router;
